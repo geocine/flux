@@ -21,7 +21,7 @@ This is meant to be run on the following spec server:
     ```
 - Paste your token on `token`
 - Upload your photos on `data`
-- Modify `prompts` and `trigger_wor` on `config.yaml`
+- Modify `prompts` and `trigger_word` on `config.yaml`
 - Start training
 
     ```
