@@ -2,7 +2,8 @@
 
 > If you are not a beginner please visit the original repository https://github.com/ostris/ai-toolkit. This is just a convenience script for total beginners.
 
-https://github.com/user-attachments/assets/66a9c8cd-fbcf-4a12-b8be-9d7ab3396442
+https://github.com/user-attachments/assets/ad955ff5-bcaf-4299-8685-02fe1225b5af
+
 
 This is meant to be run on the following spec server:
 
