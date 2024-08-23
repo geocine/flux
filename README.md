@@ -9,7 +9,7 @@ This is meant to be run on the following spec server:
 
 | Specification   | Value  |
 |-----------------|--------|
-| GPU             | 24GB VRAM (A5000 or 3090 as options). Looks like A40 is a very good option that is both cheaper but has higher VRAM   |
+| GPU             | 24GB and above VRAM (suggestions: A40, A5000, 3090)  |
 | Container Size  | 40GB   |
 | Volume Size     | 10GB   |
 
