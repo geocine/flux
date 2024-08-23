@@ -22,6 +22,7 @@ if [ ! -d "venv" ]; then
     pip3 install --upgrade pip
     pip3 install torch
     pip3 install -r requirements.txt
+    pip3 install diffusers==0.30.0 # fix broken diffusers
 else
     echo "Virtual environment already exists, skipping setup..."
     . venv/bin/activate
