@@ -22,7 +22,6 @@ if [ ! -d "venv" ]; then
     pip3 install --upgrade pip
     pip3 install torch
     pip3 install -r requirements.txt
-    pip3 install diffusers==0.30.0 # fix broken diffusers
 else
     echo "Virtual environment already exists, skipping setup..."
     . venv/bin/activate
@@ -38,6 +37,15 @@ prompts:
   - "portrait of a young [trigger] with long black hair, standing in a modern indoor space with pink and purple neon lighting"
   - "a [trigger] holding a coffee cup, in a beanie, sitting at a cafe"
   - "[trigger] as wonder woman"
+
+# You may tweak these settings to modify how the training works.
+# steps: 2000
+# lr: 4e-4
+# sample_every: 200
+# save_every: 2000
+# max_step_saves_to_keep: 4
+# base_model: "black-forest-labs/FLUX.1-dev"
+# content_or_style: "balanced"
 EOF
     echo "Created config.yaml"
 else

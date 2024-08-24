@@ -123,9 +123,19 @@ def main():
     args = parser.parse_args()
 
     # Static paths
-    input_folder = '/workspace/data'
-    output_folder = '/workspace/output'
     config_file = '/workspace/config.yaml'
+
+    # Load config
+    if not os.path.exists(config_file):
+        print(f"Error: Config file '{config_file}' not found.")
+        print("Please create a 'config.yaml' file in the /workspace directory.")
+        sys.exit(1)
+
+    config = load_config(config_file)
+
+    # Get input folder from config, with alias support
+    input_folder = config.get('data_folder', config.get('input_folder', '/workspace/data'))
+    output_folder = '/workspace/output'
 
     # Check if input folder exists and contains images
     if not os.path.exists(input_folder):
@@ -137,14 +147,6 @@ def main():
         print(f"Error: No images found in the input folder '{input_folder}'.")
         print("Please add some images (PNG, JPG, JPEG, or GIF) to the input folder and try again.")
         sys.exit(1)
-
-    # Load config
-    if not os.path.exists(config_file):
-        print(f"Error: Config file '{config_file}' not found.")
-        print("Please create a 'config.yaml' file in the /workspace directory.")
-        sys.exit(1)
-
-    config = load_config(config_file)
 
     # Get trigger from config if not provided as argument
     trigger = args.trigger or config.get('trigger')
@@ -160,8 +162,8 @@ def main():
     process_images(input_folder)
     logging.info("Pre-process completed")
 
-    # Calculate steps
-    steps = num_images * 100
+    # Calculate steps (use config value if present, otherwise default)
+    steps = config.get('steps', num_images * 100)
 
     # Prepare job configuration
     job_to_run = OrderedDict([
@@ -181,8 +183,8 @@ def main():
                     ])),
                     ('save', OrderedDict([
                         ('dtype', 'float16'),
-                        ('save_every', 200),
-                        ('max_step_saves_to_keep', 4)
+                        ('save_every', config.get('save_every', 200)),
+                        ('max_step_saves_to_keep', config.get('max_step_saves_to_keep', 4))
                     ])),
                     ('datasets', [
                         OrderedDict([
@@ -204,23 +206,22 @@ def main():
                         ('gradient_checkpointing', True),
                         ('noise_scheduler', 'flowmatch'),
                         ('optimizer', 'adamw8bit'),
-                        ('lr', 4e-4),
+                        ('lr', config.get('lr', 4e-4)),
                         ('skip_first_sample', True),
                         ('ema_config', OrderedDict([
                             ('use_ema', True),
                             ('ema_decay', 0.99)
                         ])),
-
                         ('dtype', 'bf16')
                     ])),
                     ('model', OrderedDict([
-                        ('name_or_path', 'black-forest-labs/FLUX.1-dev'),
+                        ('name_or_path', config.get('base_model', config.get('name_or_path', 'black-forest-labs/FLUX.1-dev'))),
                         ('is_flux', True),
                         ('quantize', True)
                     ])),
                     ('sample', OrderedDict([
                         ('sampler', 'flowmatch'),
-                        ('sample_every', 200),
+                        ('sample_every', config.get('sample_every', 200)),
                         ('width', 1024),
                         ('height', 1024),
                         ('prompts', prompts),
