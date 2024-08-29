@@ -42,7 +42,7 @@ prompts:
 # steps: 2000
 # lr: 4e-4
 # sample_every: 200
-# save_every: 2000
+# save_every: 200
 # max_step_saves_to_keep: 4
 # base_model: "black-forest-labs/FLUX.1-dev"
 # content_or_style: "balanced"
