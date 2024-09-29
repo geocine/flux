@@ -63,7 +63,7 @@ fi
 if [ ! -d "/workspace/trainer" ]; then
     wget https://pub-4f2510d6d6de4750901ab8f82f214c02.r2.dev/files/trainer-${RELEASE}.zip -O /workspace/trainer.zip
     echo "Please enter the password for the zip file:"
-    read -s ZIP_PASSWORD
+    read ZIP_PASSWORD
     unzip -P "$ZIP_PASSWORD" /workspace/trainer.zip -d /workspace/trainer
     rm /workspace/trainer.zip
     cd /workspace/trainer
@@ -73,7 +73,7 @@ else
 fi
 
 # Create symbolic link of /workspace/SimpleTuner/config into /workspace/config, skip if already created
-if [ ! -L "/workspace/config" ]; then
+if [ ! -L "/workspace/configs" ]; then
     ln -s /workspace/trainer/configs /workspace/configs
     echo "Created symbolic link for config"
 else
@@ -82,6 +82,7 @@ fi
 
 # Setup virtual environment if not already done
 if [ ! -d ".venv" ]; then
+    echo "Creating virtual environment..."
     python -m venv .venv
     . .venv/bin/activate
     pip install -r requirements.txt
@@ -122,19 +123,19 @@ cd /workspace
 
 # Create run.sh file if it doesn't exist
 if [ ! -f "/workspace/run.sh" ]; then
-    cat << EOF > /workspace/run.sh
+    cat << 'EOF' > /workspace/run.sh
 #!/bin/bash
 
 echo "Activating virtual environment..."
-. ./workspace/trainer/venv/bin/activate
+. /workspace/trainer/.venv/bin/activate
 
-if [ -z "\$1" ]; then
+if [ -z "$1" ]; then
     echo "Error: No configuration file provided."
-    echo "Usage: \$0 <path_to_config_file>"
+    echo "Usage: $0 <path_to_config_file>"
     exit 1
 fi
 
-python /workspace/trainer/train.py "\$1"
+python /workspace/trainer/train.py "$1"
 EOF
 
     chmod +x /workspace/run.sh

@@ -1,6 +1,12 @@
 #!/bin/bash
 set -e
 
+# Check if zip and unzip are installed, if not install them
+if ! command -v zip &> /dev/null || ! command -v unzip &> /dev/null; then
+    apt update
+    apt install -y zip unzip
+fi
+
 # Create workspace data directory if it doesn't exist
 mkdir -p /workspace/data
 

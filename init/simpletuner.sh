@@ -82,8 +82,7 @@ export SIMPLETUNER_DEBUG_IMAGE_PREP=true
 # huggingface-cli login --token \$HUGGINGFACE_TOKEN
 
 # Run the training script
-cd /workspace/SimpleTuner
-./train.sh
+/workspace/SimpleTuner/train.sh
 EOF
 
     chmod +x /workspace/run.sh
