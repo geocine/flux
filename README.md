@@ -13,24 +13,22 @@ This is meant to be run on the following spec server:
 | Specification   | Recommended Value  |
 |-----------------|--------------------|
 | GPU             | Minimum 24GB VRAM (e.g., A40, A5000, 3090). Use 48GB VRAM for image generation. |
-| Container Size  | Minimum 40GB. Set to 60GB if you also want to generate images. |
+| Container Size  | Minimum 40GB. Set to 60GB if you also want to [generate images](./docs/GENERATE.md). |
 | Volume Size     | 20GB               |
 
 ## Setup
 
-- Initialize (default trainer is aitoolkit)
+1. Initialize (default trainer is aitoolkit)
 
     ```
     curl -s https://geocine.github.io/flux/init.sh | sh
     ```
-- Paste your [huggingface](https://huggingface.co/settings/tokens) token on the `token` file.
-- Upload your photos on `data` folder
-- Modify `prompts` and `trigger_word` on `config.yaml`
-- Start training
+2. Paste your [huggingface](https://huggingface.co/settings/tokens) token on the `token` file.
+3. Upload your photos on `data` folder
+4. Modify `prompts` and `trigger_word` on `config.yaml`
+5. Start training
 
     ```
     ./run.sh
     ```
-- After training your model, you can download it from the `output` folder.
-
-If you want to learn how to generate images, check out the [generate](./docs/GENERATE.md) documentation.
+6. After training your model, you can download it from the `output` folder. Checkout the [generate images](./docs/GENERATE.md) documentation.
