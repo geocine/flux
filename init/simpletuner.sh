@@ -1,6 +1,14 @@
 #!/bin/bash
 set -e
 
+CONFIG_RELEASE=29092024
+
+# Check if zip and unzip are installed, if not install them
+if ! command -v zip &> /dev/null || ! command -v unzip &> /dev/null; then
+    apt update
+    apt install -y zip unzip
+fi
+
 # Create workspace data directory if it doesn't exist
 mkdir -p /workspace/data
 
@@ -16,9 +24,21 @@ fi
 # Create symbolic link of /workspace/SimpleTuner/config into /workspace/config, skip if already created
 if [ ! -L "/workspace/config" ]; then
     ln -s /workspace/SimpleTuner/config /workspace/config
+    # Delete .example files inside /workspace/config
+    find /workspace/config -name "*.example" -type f -delete
     echo "Created symbolic link for config"
 else
     echo "Symbolic link for config already exists, skipping..."
+fi
+
+# Download and unzip config if not already present
+if [ -z "$(ls -A /workspace/config/*.json 2>/dev/null)" ]; then
+    wget https://pub-4f2510d6d6de4750901ab8f82f214c02.r2.dev/files/config-${RELEASE}.zip -O /workspace/config.zip
+    unzip /workspace/config.zip -d /workspace/config
+    rm /workspace/config.zip
+    echo "Config files unzipped to /workspace/config"
+else
+    echo "Config files already exist, skipping..."
 fi
 
 # Setup virtual environment if not already done
