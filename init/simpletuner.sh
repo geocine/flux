@@ -56,9 +56,10 @@ HUGGINGFACE_TOKEN=\$(cat /workspace/token)
 # Set environment variables
 export HF_HUB_ENABLE_HF_TRANSFER=1
 export HF_TOKEN=\$HUGGINGFACE_TOKEN
+export SIMPLETUNER_DEBUG_IMAGE_PREP=true
 
 # Log in to Hugging Face
-huggingface-cli login --token \$HUGGINGFACE_TOKEN
+# huggingface-cli login --token \$HUGGINGFACE_TOKEN
 
 # Run the training script
 cd /workspace/SimpleTuner
