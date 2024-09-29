@@ -184,7 +184,7 @@ def main():
                     ('save', OrderedDict([
                         ('dtype', 'float16'),
                         ('save_every', config.get('save_every', 200)),
-                        ('max_step_saves_to_keep', config.get('max_step_saves_to_keep', 4))
+                        ('max_step_saves_to_keep', config.get('max_step_saves_to_keep', 10))
                     ])),
                     ('datasets', [
                         OrderedDict([
