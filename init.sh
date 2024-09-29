@@ -32,7 +32,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Validate trainer
-valid_trainers=("simpletuner" "2kpr" "kohya" "aitoolkit")
+valid_trainers=("simpletuner" "trainer" "kohya" "aitoolkit")
 if [[ ! " ${valid_trainers[@]} " =~ " ${TRAINER} " ]]; then
     echo "Invalid trainer specified. Valid options are: ${valid_trainers[*]}"
     exit 1
