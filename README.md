@@ -18,7 +18,7 @@ This is meant to be run on the following spec server:
 
 ## Setup
 
-1. Initialize (default trainer is aitoolkit)
+1. Initialize
 
     ```
     curl -s https://geocine.github.io/flux/init.sh | sh
