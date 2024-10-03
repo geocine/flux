@@ -2,7 +2,7 @@
 set -e
 
 RELEASE=18092024
-DEST_DIR=~/.cache/trainer/FLUX.1-dev
+DEST_DIR=~/.cache/trainer/FLUX.1-devd
  
 if [ ! -f "token" ]; then
     touch token
@@ -58,12 +58,13 @@ if ! command -v zip &> /dev/null || ! command -v unzip &> /dev/null; then
     apt update
     apt install -y zip unzip
 fi
-
 # Clone repository if not already present
 if [ ! -d "/workspace/trainer" ]; then
     wget https://pub-4f2510d6d6de4750901ab8f82f214c02.r2.dev/files/trainer-${RELEASE}.zip -O /workspace/trainer.zip
-    echo "Please enter the password for the zip file:"
-    read -s ZIP_PASSWORD
+    if [ -z "$ZIP_PASSWORD" ]; then
+        echo "Please enter the password for the zip file:"
+        read ZIP_PASSWORD < /dev/tty
+    fi
     unzip -P "$ZIP_PASSWORD" /workspace/trainer.zip -d /workspace/trainer
     rm /workspace/trainer.zip
     cd /workspace/trainer
