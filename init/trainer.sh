@@ -63,7 +63,7 @@ fi
 if [ ! -d "/workspace/trainer" ]; then
     wget https://pub-4f2510d6d6de4750901ab8f82f214c02.r2.dev/files/trainer-${RELEASE}.zip -O /workspace/trainer.zip
     echo "Please enter the password for the zip file:"
-    read ZIP_PASSWORD
+    read -s ZIP_PASSWORD
     unzip -P "$ZIP_PASSWORD" /workspace/trainer.zip -d /workspace/trainer
     rm /workspace/trainer.zip
     cd /workspace/trainer
