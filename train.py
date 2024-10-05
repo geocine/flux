@@ -1,9 +1,19 @@
 import os
 import sys
 
-# Read the token
-with open("token", "r") as token_file:
-    os.environ["HF_TOKEN"] = token_file.read().strip()
+if "HF_TOKEN" not in os.environ or not os.environ["HF_TOKEN"]:
+    if not os.path.isfile("token"):
+        with open("token", "w") as token_file:
+            pass
+        print("Token file created. Please add your Hugging Face token to the 'token' file and run the script again.")
+        sys.exit(1)
+    elif os.path.getsize("token") == 0:
+        print("Token file is empty. Please add your Hugging Face token to the 'token' file and run the script again.")
+        sys.exit(1)
+    with open("token", "r") as token_file:
+        os.environ["HF_TOKEN"] = token_file.read().strip()
+else:
+    print("Using HF_TOKEN from environment variable.")
 
 sys.path.append('/workspace/ai-toolkit')
 import argparse
