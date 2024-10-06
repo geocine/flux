@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-RELEASE=18092024
+RELEASE=06102024
 DEST_DIR=~/.cache/trainer/FLUX.1-dev
  
 if [ ! -f "token" ]; then
