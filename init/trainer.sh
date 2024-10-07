@@ -4,13 +4,18 @@ set -e
 RELEASE=06102024
 DEST_DIR=~/.cache/trainer/FLUX.1-dev
  
-if [ ! -f "token" ]; then
-    touch token
-    echo "Token file created. Please add your Hugging Face token to the 'token' file and run the script again."
-    exit 1
-elif [ ! -s "token" ]; then
-    echo "Token file is empty. Please add your Hugging Face token to the 'token' file and run the script again."
-    exit 1
+if [ -z "$HF_TOKEN" ]; then
+    if [ ! -f "token" ]; then
+        touch token
+        echo "Token file created. Please add your Hugging Face token to the 'token' file and run the script again."
+        exit 1
+    elif [ ! -s "token" ]; then
+        echo "Token file is empty. Please add your Hugging Face token to the 'token' file and run the script again."
+        exit 1
+    fi
+    export HF_TOKEN=$(cat token)
+else
+    echo "Using HF_TOKEN from environment variable."
 fi
 
 pip install -U "huggingface_hub[cli]" hf_transfer
