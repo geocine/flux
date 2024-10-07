@@ -21,7 +21,6 @@ fi
 pip install -U "huggingface_hub[cli]" hf_transfer
 mkdir -p "$DEST_DIR"
 export HF_HUB_ENABLE_HF_TRANSFER=1
-export HF_TOKEN=$(cat token)
 
 download_if_not_exists() {
     local repo=$1
