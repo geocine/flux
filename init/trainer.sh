@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-RELEASE=19102024
+RELEASE=28102024
 DEST_DIR=~/.cache/trainer/FLUX.1-dev
  
 if [ -z "$HF_TOKEN" ]; then
