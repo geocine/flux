@@ -91,6 +91,7 @@ if [ ! -d ".venv" ]; then
     python -m venv .venv
     . .venv/bin/activate
     pip install -r requirements.txt
+    pip install transformers==4.44.2
 else
     echo "Virtual environment already exists, skipping setup..."
     . .venv/bin/activate
