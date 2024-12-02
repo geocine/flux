@@ -5,10 +5,7 @@
 > [!WARNING]
 > If you're not a beginner, check out the original repo: https://github.com/ostris/ai-toolkit. This script is just for beginners.
 
-
-
-https://github.com/user-attachments/assets/50c53eca-98c7-4c2a-bd3d-84736acbf1a5
-
+https://github.com/user-attachments/assets/15dce82a-bb3f-4e46-b328-5732aea41e56
 
 This is meant to be run on the following spec server. Register at https://console.quickpod.io
 
