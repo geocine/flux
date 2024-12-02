@@ -5,16 +5,17 @@
 > [!WARNING]
 > If you're not a beginner, check out the original repo: https://github.com/ostris/ai-toolkit. This script is just for beginners.
 
-https://github.com/user-attachments/assets/ad955ff5-bcaf-4299-8685-02fe1225b5af
 
 
-This is meant to be run on the following spec server:
+https://github.com/user-attachments/assets/50c53eca-98c7-4c2a-bd3d-84736acbf1a5
+
+
+This is meant to be run on the following spec server. Register at https://console.quickpod.io
 
 | Specification   | Recommended Value  |
 |-----------------|--------------------|
-| GPU             | Minimum 24GB VRAM (e.g., A40, A5000, 3090). Use 48GB VRAM for image generation. |
-| Container Size  | Minimum 40GB. Set to 60GB if you also want to [generate images](./docs/GENERATE.md). |
-| Volume Size     | 20GB               |
+| GPU             | Minimum 24GB VRAM. Use a 3090/4090 |
+| Disk Space Size  | 100GB |
 
 ## Setup
 
