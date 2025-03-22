@@ -49,7 +49,14 @@ download_if_not_exists() {
     fi
 }
 
-download_if_not_exists "black-forest-labs/FLUX.1-dev" "flux1-dev.safetensors"
+# Check if MODEL environment variable is set to chroma
+if [ "$MODEL" = "chroma" ]; then
+    echo "Using Chroma model configuration..."
+    download_if_not_exists "lodestones/Chroma" "chroma-unlocked-v13.safetensors"
+else
+    # Default model configuration
+    download_if_not_exists "black-forest-labs/FLUX.1-dev" "flux1-dev.safetensors"
+fi
 download_if_not_exists "black-forest-labs/FLUX.1-dev" "ae.safetensors"
 download_if_not_exists "comfyanonymous/flux_text_encoders" "clip_l.safetensors"
 download_if_not_exists "comfyanonymous/flux_text_encoders" "t5xxl_fp16.safetensors"

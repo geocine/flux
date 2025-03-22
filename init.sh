@@ -14,6 +14,7 @@ else
 #!/bin/bash
 
 TRAINER="aitoolkit"
+MODEL=""
 
 # Parse command line arguments
 while [[ $# -gt 0 ]]; do
@@ -21,6 +22,11 @@ while [[ $# -gt 0 ]]; do
     case $key in
         --trainer)
         TRAINER="$2"
+        shift # past argument
+        shift # past value
+        ;;
+        --model)
+        MODEL="$2"
         shift # past argument
         shift # past value
         ;;
@@ -41,8 +47,12 @@ fi
 # URL for the specific trainer's init script
 INIT_URL="https://geocine.github.io/flux/init/${TRAINER}.sh"
 
-# Download and execute the specific init script
-curl -s "$INIT_URL" | sh
+# Download and execute the specific init script with model parameter if provided
+if [[ -n "$MODEL" ]]; then
+    curl -s "$INIT_URL" | MODEL="$MODEL" sh
+else
+    curl -s "$INIT_URL" | sh
+fi
 
 EOF
 fi
