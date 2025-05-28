@@ -12,7 +12,7 @@ mkdir -p /workspace/data
 
 # Clone repository if not already present
 if [ ! -d "/workspace/ai-toolkit" ]; then
-    git clone https://github.com/ostris/ai-toolkit.git
+    git clone https://github.com/geocine/ai-toolkit.git
     cd /workspace/ai-toolkit
     git submodule update --init --recursive
 else
@@ -44,14 +44,54 @@ prompts:
   - "a [trigger] holding a coffee cup, in a beanie, sitting at a cafe"
   - "[trigger] as wonder woman"
 
+base_model: "lodestones/Chroma"
+timestep_type: "sigmoid"
+optimizer: "radamschedulefree"
+optimizer_args:
+    betas: [0.9, 0.99]
+    weight_decay: 1e-4
+arch: "chroma"
+sample_width: 832
+sample_height: 1216
+sample_steps: 25
+
 # You may tweak these settings to modify how the training works.
 # steps: 2000
-# lr: 1e-4 # previously 4e-4
+# lr: 1e-4
 # sample_every: 200
 # save_every: 200
 # max_step_saves_to_keep: 4
-# base_model: "black-forest-labs/FLUX.1-dev"
-
+# gradient_checkpointing: false # not implemented for chroma yet
+# These are the default settings for chroma.
+network:
+    type: "lora"
+    linear: 32 # same thing as rank in this context
+    linear_alpha: 32 # Not actuallly used in chroma, defaults to rank
+    ramp_double_blocks: true
+    ramp_target_lr: 1.5e-6       # final LR you want for the mapped blocks
+    ramp_warmup_steps: 1000      # number of optimisation steps for the climb
+    ramp_type: linear            # or "cosine"
+    network_kwargs:
+        lr_if_contains:
+            double_blocks$$0$$: 0.001
+            double_blocks$$1$$: 0.00289
+            double_blocks$$2$$: 0.00456
+            double_blocks$$3$$: 0.006
+            double_blocks$$4$$: 0.00722
+            double_blocks$$5$$: 0.00822
+            double_blocks$$6$$: 0.009
+            double_blocks$$7$$: 0.00956
+            double_blocks$$8$$: 0.00989
+            double_blocks$$9$$: 0.01
+            double_blocks$$10$$: 0.00989
+            double_blocks$$11$$: 0.00956
+            double_blocks$$12$$: 0.009
+            double_blocks$$13$$: 0.00822
+            double_blocks$$14$$: 0.00722
+            double_blocks$$15$$: 0.006
+            double_blocks$$16$$: 0.00456
+            double_blocks$$17$$: 0.00289
+            double_blocks$$18$$: 0.0013
 EOF
     echo "Created config.yaml"
 else
@@ -89,27 +129,5 @@ else
     echo "run.sh already exists, skipping..."
 fi
 
-# Download inference.py if it doesn't exist
-if [ ! -f "/workspace/ai-toolkit/inference.py" ]; then
-    curl -o /workspace/ai-toolkit/inference.py https://geocine.github.io/flux/inference.py
-    echo "Downloaded inference.py"
-else
-    echo "inference.py already exists, skipping download..."
-fi
 
-# Create gen.sh file if it doesn't exist
-if [ ! -f "/workspace/gen.sh" ]; then
-    cat << EOF > /workspace/gen.sh
-#!/bin/bash
-
-. /workspace/ai-toolkit/venv/bin/activate
-python /workspace/ai-toolkit/inference.py
-EOF
-
-    chmod +x /workspace/gen.sh
-    echo "Created gen.sh file"
-else
-    echo "gen.sh already exists, skipping..."
-fi
-
-echo "Setup complete! Visit https://huggingface.co/black-forest-labs/FLUX.1-dev to accept the license and create your token at https://huggingface.co/settings/tokens/new?"
+echo "Setup complete! Visit https://huggingface.co/settings/tokens/new? to create your token"

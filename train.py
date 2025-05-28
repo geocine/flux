@@ -186,15 +186,16 @@ def main():
                     ('training_folder', output_folder),
                     ('device', 'cuda:0'),
                     ('trigger_word', trigger),
-                    ('network', OrderedDict([
+                    ('network', config.get('network', OrderedDict([
                         ('type', 'lora'),
                         ('linear', 16),
                         ('linear_alpha', 16)
-                    ])),
+                    ]))),
                     ('save', OrderedDict([
                         ('dtype', 'float16'),
                         ('save_every', config.get('save_every', 200)),
-                        ('max_step_saves_to_keep', config.get('max_step_saves_to_keep', 10))
+                        ('max_step_saves_to_keep', config.get('max_step_saves_to_keep', 10)),
+                        ('push_to_hub', False)
                     ])),
                     ('datasets', [
                         OrderedDict([
@@ -207,16 +208,17 @@ def main():
                         ])
                     ]),
                     ('train', OrderedDict([
-                        ('batch_size', 1),
+                        ('batch_size', config.get('batch_size', 1)),
                         ('steps', steps),
                         ('gradient_accumulation_steps', 1),
                         ('train_unet', True),
                         ('train_text_encoder', False),
-                        ('content_or_style', 'balanced'),
-                        ('gradient_checkpointing', True),
+                        ('gradient_checkpointing', config.get('gradient_checkpointing', True)),
                         ('noise_scheduler', 'flowmatch'),
-                        ('optimizer', 'adamw8bit'),
-                        ('lr', config.get('lr', 4e-4)),
+                        ('timestep_type', config.get('timestep_type', 'linear')),
+                        ('optimizer', config.get('optimizer', 'adamw8bit')),
+                        ('optimizer_args', config.get('optimizer_args', {})),
+                        ('lr', config.get('lr', 1e-4)),
                         ('skip_first_sample', True),
                         ('ema_config', OrderedDict([
                             ('use_ema', True),
@@ -226,20 +228,20 @@ def main():
                     ])),
                     ('model', OrderedDict([
                         ('name_or_path', config.get('base_model', config.get('name_or_path', 'black-forest-labs/FLUX.1-dev'))),
-                        ('is_flux', True),
+                        ('arch', config.get('arch', 'flux')),
                         ('quantize', True)
                     ])),
                     ('sample', OrderedDict([
                         ('sampler', 'flowmatch'),
                         ('sample_every', config.get('sample_every', 200)),
-                        ('width', 1024),
-                        ('height', 1024),
+                        ('width', config.get('width', 1024)),
+                        ('height', config.get('height', 1024)),
                         ('prompts', prompts),
                         ('neg', ''),
                         ('seed', 42),
                         ('walk_seed', True),
                         ('guidance_scale', 4),
-                        ('sample_steps', 20)
+                        ('sample_steps', config.get('sample_steps', 20))
                     ]))
                 ])
             ]),

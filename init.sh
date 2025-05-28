@@ -14,7 +14,6 @@ else
 #!/bin/bash
 
 TRAINER="aitoolkit"
-MODEL=""
 
 # Parse command line arguments
 while [[ $# -gt 0 ]]; do
@@ -22,11 +21,6 @@ while [[ $# -gt 0 ]]; do
     case $key in
         --trainer)
         TRAINER="$2"
-        shift # past argument
-        shift # past value
-        ;;
-        --model)
-        MODEL="$2"
         shift # past argument
         shift # past value
         ;;
@@ -38,7 +32,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Validate trainer
-valid_trainers=("simpletuner" "trainer" "kohya" "aitoolkit")
+valid_trainers=("simpletuner" "trainer" "aitoolkit", "atchroma")
 if [[ ! " ${valid_trainers[@]} " =~ " ${TRAINER} " ]]; then
     echo "Invalid trainer specified. Valid options are: ${valid_trainers[*]}"
     exit 1
@@ -47,12 +41,7 @@ fi
 # URL for the specific trainer's init script
 INIT_URL="https://geocine.github.io/flux/init/${TRAINER}.sh"
 
-# Download and execute the specific init script with model parameter if provided
-if [[ -n "$MODEL" ]]; then
-    curl -s "$INIT_URL" | MODEL="$MODEL" sh
-else
-    curl -s "$INIT_URL" | sh
-fi
+curl -s "$INIT_URL" | sh
 
 EOF
 fi
