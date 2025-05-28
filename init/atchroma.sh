@@ -73,25 +73,25 @@ network:
     ramp_type: linear            # or "cosine"
     network_kwargs:
         lr_if_contains:
-            double_blocks$$0$$: 0.001
-            double_blocks$$1$$: 0.00289
-            double_blocks$$2$$: 0.00456
-            double_blocks$$3$$: 0.006
-            double_blocks$$4$$: 0.00722
-            double_blocks$$5$$: 0.00822
-            double_blocks$$6$$: 0.009
-            double_blocks$$7$$: 0.00956
-            double_blocks$$8$$: 0.00989
-            double_blocks$$9$$: 0.01
-            double_blocks$$10$$: 0.00989
-            double_blocks$$11$$: 0.00956
-            double_blocks$$12$$: 0.009
-            double_blocks$$13$$: 0.00822
-            double_blocks$$14$$: 0.00722
-            double_blocks$$15$$: 0.006
-            double_blocks$$16$$: 0.00456
-            double_blocks$$17$$: 0.00289
-            double_blocks$$18$$: 0.0013
+            double_blocks\$\$0\$\$: 0.001
+            double_blocks\$\$1\$\$: 0.00289
+            double_blocks\$\$2\$\$: 0.00456
+            double_blocks\$\$3\$\$: 0.006
+            double_blocks\$\$4\$\$: 0.00722
+            double_blocks\$\$5\$\$: 0.00822
+            double_blocks\$\$6\$\$: 0.009
+            double_blocks\$\$7\$\$: 0.00956
+            double_blocks\$\$8\$\$: 0.00989
+            double_blocks\$\$9\$\$: 0.01
+            double_blocks\$\$10\$\$: 0.00989
+            double_blocks\$\$11\$\$: 0.00956
+            double_blocks\$\$12\$\$: 0.009
+            double_blocks\$\$13\$\$: 0.00822
+            double_blocks\$\$14\$\$: 0.00722
+            double_blocks\$\$15\$\$: 0.006
+            double_blocks\$\$16\$\$: 0.00456
+            double_blocks\$\$17\$\$: 0.00289
+            double_blocks\$\$18\$\$: 0.0013
 EOF
     echo "Created config.yaml"
 else
