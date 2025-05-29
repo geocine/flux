@@ -234,8 +234,8 @@ def main():
                     ('sample', OrderedDict([
                         ('sampler', 'flowmatch'),
                         ('sample_every', config.get('sample_every', 200)),
-                        ('width', config.get('width', 1024)),
-                        ('height', config.get('height', 1024)),
+                        ('width', config.get('sample_width', 1024)),
+                        ('height', config.get('sample_height', 1024)),
                         ('prompts', prompts),
                         ('neg', ''),
                         ('seed', 42),
