@@ -38,10 +38,10 @@ cd /workspace
 # Create config.yaml file if it doesn't exist
 if [ ! -f "config.yaml" ]; then
     cat << EOF > config.yaml
-trigger: "ohwx woman"
+trigger: "lyn"
 prompts:
-  - "portrait of a young [trigger] with long black hair, standing in a modern indoor space with pink and purple neon lighting"
-  - "a [trigger] holding a coffee cup, in a beanie, sitting at a cafe"
+  - "portrait of [trigger] with long black hair, standing in a modern indoor space with pink and purple neon lighting"
+  - "[trigger] holding a coffee cup, in a beanie, sitting at a cafe"
   - "[trigger] as wonder woman"
 
 base_model: "lodestones/Chroma"
@@ -51,13 +51,13 @@ optimizer_args:
     betas: [0.9, 0.99]
     weight_decay: 1e-4
 arch: "chroma"
-sample_width: 832
-sample_height: 1216
+sample_width: 512
+sample_height: 512
 sample_steps: 25
 
 # You may tweak these settings to modify how the training works.
-# steps: 2000
-# lr: 1e-4
+steps: 5000
+lr: 3e-4
 # sample_every: 200
 # save_every: 200
 # max_step_saves_to_keep: 4
