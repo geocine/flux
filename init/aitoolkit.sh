@@ -46,7 +46,7 @@ prompts:
 
 # You may tweak these settings to modify how the training works.
 # steps: 2000
-# lr: 1e-4 # previously 4e-4
+lr: 4e-4 # toolkit default is 1e-4
 # sample_every: 200
 # save_every: 200
 # max_step_saves_to_keep: 4
