@@ -20,6 +20,7 @@ import argparse
 import logging
 import torch
 import oyaml as yaml
+import json
 from collections import OrderedDict
 from PIL import Image
 from toolkit.job import run_job
@@ -43,51 +44,96 @@ def fixed_get_imports(filename: Union[str, os.PathLike]) -> list[str]:
         imports.remove("flash_attn")
     return imports
 
+# Global model and processor variables
+model = None
+processor = None
+
+def load_model():
+    """Load Florence-2 model and processor once globally"""
+    global model, processor
+    if model is None or processor is None:
+        logging.info("Loading Florence-2 model and processor...")
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+        
+        with patch("transformers.dynamic_module_utils.get_imports", fixed_get_imports):
+            model = AutoModelForCausalLM.from_pretrained(
+                "MiaoshouAI/Florence-2-base-PromptGen-v2.0", 
+                trust_remote_code=True
+            ).to(device)
+            processor = AutoProcessor.from_pretrained(
+                "MiaoshouAI/Florence-2-base-PromptGen-v2.0", 
+                trust_remote_code=True
+            )
+        logging.info("Model and processor loaded successfully")
+    return model, processor
+
 def caption_image(image_path, prompt="<DETAILED_CAPTION>"):
     logging.info(f"Captioning image: {image_path}")
-
-    device = "cuda:0" if torch.cuda.is_available() else "cpu"
-    torch_dtype = torch.float32
-
-    with patch("transformers.dynamic_module_utils.get_imports", fixed_get_imports):
-        model = AutoModelForCausalLM.from_pretrained("microsoft/Florence-2-large", torch_dtype=torch_dtype, trust_remote_code=True).to(device)
-        processor = AutoProcessor.from_pretrained("microsoft/Florence-2-large", trust_remote_code=True)
-
-    # Open the image and convert it to RGB mode
-    image = Image.open(image_path).convert('RGB')
-    image_size = image.size  # Get the image size (width, height)
+    
+    # Load model and processor
+    model, processor = load_model()
+    device = "cuda" if torch.cuda.is_available() else "cpu"
     
     try:
-        inputs = processor(text=prompt, images=image, return_tensors="pt")
-    except ValueError as e:
-        logging.error(f"Error processing image {image_path}: {str(e)}")
-        return None
-
-    # Convert inputs to the correct dtype and device
-    inputs = {
-        "input_ids": inputs["input_ids"].to(device).long(),
-        "pixel_values": inputs["pixel_values"].to(device, dtype=torch_dtype)
-    }
-
-    generated_ids = model.generate(
-        input_ids=inputs["input_ids"],
-        pixel_values=inputs["pixel_values"],
-        max_new_tokens=1000,
-        num_beams=3,
-        do_sample=False
-    )
-    generated_text = processor.batch_decode(generated_ids, skip_special_tokens=False)[0]
-    caption_dict = processor.post_process_generation(generated_text, task=prompt, image_size=image_size)
+        # Load image
+        image = Image.open(image_path).convert("RGB")
+        
+        # Process image and prompt
+        inputs = processor(text=prompt, images=image, return_tensors="pt").to(device)
+        
+        # Generate caption
+        with torch.no_grad():
+            generated_ids = model.generate(
+                input_ids=inputs["input_ids"],
+                pixel_values=inputs["pixel_values"],
+                max_new_tokens=1024,
+                do_sample=False,
+                num_beams=3
+            )
+        
+        # Decode generated text
+        generated_text = processor.batch_decode(generated_ids, skip_special_tokens=False)[0]
+        
+        # Post-process the generated text
+        caption = processor.post_process_generation(
+            generated_text, 
+            task=prompt, 
+            image_size=(image.width, image.height)
+        )
+        
+        logging.info(f"Caption generated successfully")
+        logging.info(f"Caption type: {type(caption)}")
+        
+        # Handle the case where caption is a dictionary
+        if isinstance(caption, dict):
+            # Log the keys to help with debugging
+            logging.info(f"Caption keys: {caption.keys()}")
+            
+            # Check for the <DETAILED_CAPTION> key specifically
+            if prompt in caption:
+                caption_result = caption[prompt]
+            # Try other common keys
+            elif 'caption' in caption:
+                caption_result = caption['caption']
+            elif 'text' in caption:
+                caption_result = caption['text']
+            elif 'description' in caption:
+                caption_result = caption['description']
+            else:
+                # If we can't find a specific key, convert the whole dict to a string
+                caption_result = json.dumps(caption)
+        else:
+            caption_result = caption
+        
+        # Ensure we return a string
+        if not isinstance(caption_result, str):
+            caption_result = str(caption_result)
+            
+        return caption_result
     
-    # Extract the caption from the dictionary
-    if isinstance(caption_dict, dict) and prompt in caption_dict:
-        caption = caption_dict[prompt]
-        if isinstance(caption, list):
-            caption = ' '.join(caption)
-    else:
-        caption = str(caption_dict)  # Fallback to string representation if unexpected format
-
-    return caption
+    except Exception as e:
+        logging.error(f"Error generating caption for {image_path}: {str(e)}")
+        return None
 
 def process_images(input_folder):
     for filename in os.listdir(input_folder):
