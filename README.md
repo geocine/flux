@@ -3,7 +3,7 @@
 > [!WARNING]
 > If you're not a beginner, check out the original repo: https://github.com/ostris/ai-toolkit. This script is just for beginners.
 
-https://github.com/user-attachments/assets/15dce82a-bb3f-4e46-b328-5732aea41e56
+https://github.com/user-attachments/assets/2c65f498-5185-4e0d-8344-cbd88068e6b2
 
 This is meant to be run on the following spec server. Register at https://console.quickpod.io
 
